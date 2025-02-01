@@ -6,9 +6,5 @@ export class CreateChatDto {
   title: string;
 
   @IsNotEmpty()
-  @IsString()
-  query: string;
-
-  @IsNotEmpty()
   userId: number;
 }

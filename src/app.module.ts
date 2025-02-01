@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
 import { MessagesModule } from './messages/messages.module';
 import { ChatsModule } from './chats/chats.module';
 import { UsersModule } from './users/users.module';
 import * as dotenv from 'dotenv';
+import { AuthModule } from './auth/auth.module';
 
 const entitiesPath = __dirname + '/**/*.entity{.ts,.js}';
 
@@ -40,6 +40,7 @@ const env = process.env.NODE_ENV;
             synchronize: false,
           },
     ),
+    AuthModule,
     UsersModule,
     ChatsModule,
     MessagesModule,

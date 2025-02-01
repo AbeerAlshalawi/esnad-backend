@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { PageService } from 'common/page.service';
+import { UserDTO } from './dto/user.dto';
 
 @Injectable()
-export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+export class UsersService extends PageService {
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {
+    super();
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async create(createUserDto: CreateUserDto) {
+    const { email, password } = createUserDto;
+
+    if (!email || !password) {
+      throw new HttpException(
+        'Email and password are required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const user = this.userRepository.create(createUserDto);
+    await this.userRepository.save(user);
+    return { ...createUserDto };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async findOneByEmail(email: string): Promise<UserDTO | null> {
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password'],
+    });
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    if (!user) {
+      return null;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return {
+      id: user.id,
+      email: user.email,
+      password: user.password,
+    };
   }
 }
