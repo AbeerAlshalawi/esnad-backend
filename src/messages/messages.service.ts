@@ -27,10 +27,7 @@ export class MessagesService {
     // eslint-disable-next-line prefer-const
     let { content } = createMessageDto;
 
-    let chatHistory = chatId ? await this.findChatMessages(chatId) : [];
-    console.log(chatHistory);
-
-    chatHistory = [];
+    const chatHistory = chatId ? await this.findChatMessages(chatId) : [];
 
     const { answer, chatName } = await this.getAIResponse(
       content,
