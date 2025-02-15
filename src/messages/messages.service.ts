@@ -25,17 +25,23 @@ export class MessagesService {
     chatId?: number,
   ) {
     // eslint-disable-next-line prefer-const
-    let { content } = createMessageDto;
+    // let { content } = createMessageDto;
 
     const chatHistory = chatId ? await this.findChatMessages(chatId) : [];
 
-    const { answer, chatName } = await this.getAIResponse(
-      content,
-      chatHistory,
-      !chatId,
-    );
+    // const { answer, chatName } = await this.getAIResponse(
+    //   content,
+    //   chatHistory,
+    //   !chatId,
+    // );
 
-    if (chatName) {
+    const answer = 'This is a test answer';
+    const chatName = 'Test Chat';
+
+    if (
+      // chatName
+      chatHistory.length === 0
+    ) {
       const user = await this.userRepository.findOne({
         where: { id: userId },
       });

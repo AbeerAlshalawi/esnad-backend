@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,15 +15,6 @@ export class UsersService extends PageService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const { email, password } = createUserDto;
-
-    if (!email || !password) {
-      throw new HttpException(
-        'Email and password are required',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const user = this.userRepository.create(createUserDto);
     await this.userRepository.save(user);
     return { ...createUserDto };

@@ -16,11 +16,12 @@ import { JwtStrategy } from './strategy/jwt.startegy';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: parseInt(
-            configService.getOrThrow<string>(
-              'ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC',
-            ),
-          ),
+          expiresIn: `${configService.getOrThrow<string>('ACCESS_TOKEN_VALIDITY_DURATION_IN_DAYS')}d`,
+          //  parseInt(
+          //   configService.getOrThrow<string>(
+          //     'ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC',
+          //   ),
+          // ),
         },
       }),
       inject: [ConfigService],

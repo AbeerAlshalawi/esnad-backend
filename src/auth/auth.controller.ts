@@ -15,6 +15,8 @@ import { RegisterRequestDTO } from './dto/register-request.dto';
 import { RegisterResponseDTO } from './dto/register-response.dto';
 import { LoginResponseDTO } from './dto/login-response.dto';
 import { Public } from './decorators/public.decorator';
+import { Get } from '@nestjs/common';
+import { JwtGuard } from './guards/jwt.guard';
 
 @Public()
 @Controller('auth')
@@ -39,5 +41,21 @@ export class AuthController {
       );
     }
     return await this.authService.register(registerBody);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('validate')
+  validateToken(@Request() req) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new HttpException(
+        'Invalid authorization header',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    return this.authService.validateToken(token);
   }
 }

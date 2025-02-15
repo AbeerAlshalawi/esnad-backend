@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -31,10 +33,14 @@ export class AuthService {
 
   async login(user: User) {
     const payload = {
-      email: user.email,
       id: user.id,
+      email: user.email,
     };
-    return { id: user.id, access_token: this.jwtService.sign(payload) };
+    return {
+      id: user.id,
+      email: user.email,
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
   async register(user: RegisterRequestDTO): Promise<AccessToken> {
@@ -51,5 +57,18 @@ export class AuthService {
     };
     await this.userService.create(newUser);
     return this.login(newUser);
+  }
+
+  validateToken(token: string) {
+    try {
+      const decoded = this.jwtService.verify(token);
+      return {
+        id: decoded.id,
+        email: decoded.email,
+      };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+    }
   }
 }

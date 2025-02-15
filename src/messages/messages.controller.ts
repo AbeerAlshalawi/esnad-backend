@@ -16,7 +16,7 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @UseGuards(JwtGuard)
-  @Post(':chatId')
+  @Post(':chatId?')
   create(
     @Body() createMessageDto: CreateMessageDto,
     @Request() req,
