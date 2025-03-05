@@ -25,23 +25,17 @@ export class MessagesService {
     chatId?: number,
   ) {
     // eslint-disable-next-line prefer-const
-    // let { content } = createMessageDto;
+    let { content } = createMessageDto;
 
     const chatHistory = chatId ? await this.findChatMessages(chatId) : [];
 
-    // const { answer, chatName } = await this.getAIResponse(
-    //   content,
-    //   chatHistory,
-    //   !chatId,
-    // );
+    const { answer, chatName } = await this.getAIResponse(
+      content,
+      chatHistory,
+      !chatId,
+    );
 
-    const answer = 'This is a test answer';
-    const chatName = 'Test Chat';
-
-    if (
-      // chatName
-      chatHistory.length === 0
-    ) {
+    if (chatHistory.length === 0) {
       const user = await this.userRepository.findOne({
         where: { id: userId },
       });
@@ -77,9 +71,9 @@ export class MessagesService {
     isFirstMessage: boolean,
   ) {
     try {
-      console.log({ question, chat_history, return_chat_name: isFirstMessage });
+      const ai_api = process.env.AI_API_URL;
       const response = await this.httpService
-        .post('https://9444-95-218-193-12.ngrok-free.app/query', {
+        .post(`${ai_api}/query`, {
           question,
           chat_history,
           return_chat_name: isFirstMessage,
@@ -99,7 +93,6 @@ export class MessagesService {
   async findChatMessages(chatId: number) {
     return await this.messageRepository.find({
       where: { chat: { id: chatId } },
-      // order: { id: 'DESC' },
     });
   }
 }
