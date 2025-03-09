@@ -16,7 +16,7 @@ This is the backend of the app. Other repos:
 
 ## Tech Stack
 **Frontend:** React, Tailwind CSS.  
-**Backend:** NestJS, PostgreSQL.  
+**Backend:** NestJS, PostgreSQL, REST, JWT.  
 
 ## Deployment
 **Frontend:** Vercel  
