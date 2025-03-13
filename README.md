@@ -1,4 +1,4 @@
-# Esand: Legal Research Assistant
+# Esnad: Legal Research Assistant
 Esnad is a legal research assistant designed to help lawyers work more efficiently. It features a user-friendly chatbot interface that provides case-specific insights, quickly identifies relevant case law, summarizes key precedents, and spots weaknesses in related legal arguments.
 
 ## Demo
